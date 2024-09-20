@@ -1,11 +1,11 @@
 import mongoose, { Document } from 'mongoose';
 
-export interface IUser extends Document {
+export interface ICliente extends Document {
     name: string;
     email: string;
 }
 
-const userSchema = new mongoose.Schema({
+const clienteSchema = new mongoose.Schema({
     name: { type: String, required: [true, "Nome é obrigatório"] },
     email: {
         type: String, required: [true, "O e-mail é obrigatório"], unique: true, validate: {
@@ -18,6 +18,6 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model<IUser>('User', userSchema, 'users');
+const User = mongoose.model<ICliente>('Cliente', clienteSchema, 'clientes');
 
 export default User;

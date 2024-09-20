@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import User from '../models/userModel';
+import Cliente from '../models/clienteModel';
 
-class userController {
-    public async createUser(req: Request, res: Response) {
+class clienteController {
+    public async createCliente(req: Request, res: Response) {
         const { name, email } = req.body;
 
         if (!name && !email) {
@@ -10,7 +10,7 @@ class userController {
         }
 
         try {
-            const response = await User.create({
+            const response = await Cliente.create({
                 name, email
             })
             res.status(201).json(response);
@@ -26,10 +26,10 @@ class userController {
         }
     };
 
-    public async getUsers(req: Request, res: Response) {
+    public async getClientes(req: Request, res: Response) {
         try {
-            const users = await User.find();
-            res.status(200).json(users);
+            const clientes = await Cliente.find();
+            res.status(200).json(clientes);
         } catch (error: any) {
             res.status(500).json({ error: error.message });
         }
@@ -37,41 +37,41 @@ class userController {
 
     public async update(req: Request, res: Response) {
         const { name, email } = req.body;
-        const { userId } = req.params;
+        const { clienteId } = req.params;
         try {
-            const user = await User.findOne({ _id: userId });
+            const cliente = await Cliente.findOne({ _id: clienteId });
 
-            if (!user) {
-                return res.status(404).json({ message: 'Usuário não encontrado' });
+            if (!cliente) {
+                return res.status(404).json({ message: 'Cliente não encontrado' });
             }
-            user.name = name || user.name;
-            user.email = email || user.email;
+            cliente.name = name || cliente.name;
+            cliente.email = email || cliente.email;
 
-            await user.save();
-            return res.status(200).json({ message: 'Usuário atualizado com sucesso', user });
+            await cliente.save();
+            return res.status(200).json({ message: 'Cliente atualizado com sucesso', cliente });
         } catch (error: any) {
             if (error.code === 11000 || error.code === 11001) {
                 return res.status(500).json({ message: "Este e-mail já está em uso" });
             }
-            return res.status(500).json({ message: 'Erro ao atualizar usuário', error });
+            return res.status(500).json({ message: 'Erro ao atualizar cliente', error });
         }
     }
 
     public async delete(req: Request, res: Response) {
         try {
-            const { userId } = req.params;
+            const { clienteId } = req.params;
 
-            const user = await User.findByIdAndDelete({ _id: userId });
+            const cliente = await Cliente.findByIdAndDelete({ _id: clienteId });
 
-            if (!user) {
-                return res.status(404).json({ message: 'Usuário não encontrado' });
+            if (!cliente) {
+                return res.status(404).json({ message: 'Cliente não encontrado' });
             }
 
-            res.status(200).json({ message: 'Usuário removido com sucesso' });
+            res.status(200).json({ message: 'Cliente removido com sucesso' });
         } catch (error) {
-            res.status(500).json({ message: 'Erro ao remover usuário', error });
+            res.status(500).json({ message: 'Erro ao remover cliente', error });
         }
     }
 }
 
-export default new userController();
+export default new clienteController();
