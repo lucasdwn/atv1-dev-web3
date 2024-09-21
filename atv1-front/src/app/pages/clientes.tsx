@@ -30,7 +30,7 @@ export default function ClientManagement() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-  
+
     if (newName && newEmail) {
       try {
         if (editMode && editClientId !== null) {
@@ -38,13 +38,13 @@ export default function ClientManagement() {
           setClients((prevClients) =>
             prevClients.map((client) => (client._id === editClientId ? updatedClient : client))
           );
-  
+
           resetForm();
         } else {
           const newClient = await createCliente({ name: newName, email: newEmail });
-  
+
           setClients((prevClients) => [...prevClients, newClient]);
-  
+
           resetForm();
         }
       } catch (error: any) {
@@ -57,8 +57,8 @@ export default function ClientManagement() {
 
   const deleteClient = async (id: string) => {
     const confirmed = window.confirm('Você realmente deseja deletar este cliente?');
-    if (!confirmed) return; 
-  
+    if (!confirmed) return;
+
     setError(null);
     try {
       await deleteCliente(id);
@@ -95,9 +95,16 @@ export default function ClientManagement() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div>
-            <Image src={testPng.src} alt="Shopping illustration" className="w-full h-auto" width={500} height={500} />
+          <div className="h-60 overflow-hidden">
+            <Image
+              src={testPng.src}
+              alt="Shopping illustration"
+              className="w-full h-full object-cover"
+              width={500}
+              height={500}
+            />
           </div>
+
           <div className="bg-gray-900 border border-blue-500 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">{editMode ? 'Editar' : 'Cadastro'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
