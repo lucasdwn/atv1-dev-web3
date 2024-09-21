@@ -1,9 +1,14 @@
 import api from './api';
 
 export interface Cliente {
-  id: number;
+  _id: string;
   name: string;
   email: string;
+}
+
+interface IResponse {
+  message: string;
+  cliente: Cliente;
 }
 
 export const getClientes = async (): Promise<Cliente[]> => {
@@ -11,7 +16,6 @@ export const getClientes = async (): Promise<Cliente[]> => {
     const response = await api.get<Cliente[]>('/cliente');
     return response.data;
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
     throw error;
   }
 };
@@ -21,36 +25,32 @@ export const getClienteById = async (id: number): Promise<Cliente> => {
     const response = await api.get<Cliente>(`/cliente/${id}`);
     return response.data;
   } catch (error) {
-    console.error(`Erro ao buscar o cliente com id ${id}:`, error);
     throw error;
   }
 };
 
-export const createCliente = async (userData: Omit<Cliente, 'id'>): Promise<Cliente> => {
+export const createCliente = async (userData: Omit<Cliente, '_id'>): Promise<Cliente> => {
   try {
     const response = await api.post<Cliente>('/cliente', userData);
     return response.data;
   } catch (error) {
-    console.error('Erro ao criar cliente:', error);
     throw error;
   }
 };
 
-export const updateCliente = async (id: number, userData: Partial<Cliente>): Promise<Cliente> => {
+export const updateCliente = async (id: string, userData: Partial<Cliente>): Promise<Cliente> => {
   try {
-    const response = await api.put<Cliente>(`/cliente/${id}`, userData);
-    return response.data;
+    const response = await api.put<IResponse>(`/cliente/${id}`, userData);
+    return response.data.cliente;
   } catch (error) {
-    console.error(`Erro ao atualizar o cliente com id ${id}:`, error);
     throw error;
   }
 };
 
-export const deleteCliente = async (id: number): Promise<void> => {
+export const deleteCliente = async (id: string): Promise<void> => {
   try {
     await api.delete(`/cliente/${id}`);
   } catch (error) {
-    console.error(`Erro ao deletar o cliente com id ${id}:`, error);
     throw error;
   }
 };
